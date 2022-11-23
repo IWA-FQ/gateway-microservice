@@ -1,6 +1,7 @@
 package com.gateway;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.gateway.filter.factory.TokenRelayGatewayFilterFactory;
@@ -16,21 +17,39 @@ public class GatewayApplication {
     }
     @Autowired
     private TokenRelayGatewayFilterFactory filterFactory;
+    @Value("${microservice.address.user}")
+    private String userAddress;
+    @Value("${microservice.address.offer}")
+    private String offerAddress;
+    @Value("${microservice.address.recommendation}")
+    private String recommendationAddress;
+    @Value("${microservice.address.frontEnd}")
+    private String frontEndAddress;
 
     @Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
-
                 .route(r -> r
-                        .path("/api/**")
+                        .path("/api/auth/**")
                         .filters(f -> f.filters(filterFactory.apply())
                                 .removeRequestHeader("Cookie"))
-                        .uri("http://localhost:4000/api"))
+                        .uri(userAddress))
+                .route(r -> r
+                        .path("/api/user/**")
+                        .filters(f -> f.filters(filterFactory.apply())
+                                .removeRequestHeader("Cookie"))
+                        .uri(userAddress))
+
+                .route(r -> r
+                        .path("/api/offer/**")
+                        .filters(f -> f.filters(filterFactory.apply())
+                                .removeRequestHeader("Cookie"))
+                        .uri(offerAddress))
                 .route(r -> r
                         .path("/**")
                         .filters(f -> f.filters(filterFactory.apply())
                                 .removeRequestHeader("Cookie"))
-                        .uri("http://localhost:3000"))
+                        .uri(frontEndAddress))
                 .build();
     }
 

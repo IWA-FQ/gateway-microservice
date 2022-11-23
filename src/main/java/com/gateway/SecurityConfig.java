@@ -11,14 +11,9 @@ public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain (ServerHttpSecurity http) {
 
-        http
+        http.csrf().disable()
                 .authorizeExchange()
-                .pathMatchers("/api/**").hasRole("USER")
-                .pathMatchers("/api/dsds").hasRole("RECRUITER")
-                .anyExchange().permitAll()
-                .and()
-                .oauth2Login(); // to redirect to oauth2 login page.
-
+                .anyExchange().permitAll();
         return http.build();
     }
 

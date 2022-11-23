@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  api-gateway:
+    container_name: api-gateway
+    build: .
+    networks:
+      - polylink-network
+    environment:
+      server.port: 8080
+      microservice.address.user: http://user-microservice:8080
+      microservice.address.offer: http://offer-microservice:8080
+      microservice.address.frontEnd: http://localhost:3000
+      microservice.address.recommendation: http://localhost:4002
+    ports:
+      - 8080:8080
+
+
+
+networks:
+  polylink-network:
+    name: polylink-network
+    external: true

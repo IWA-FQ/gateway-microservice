@@ -25,6 +25,8 @@ public class GatewayApplication {
     private String recommendationAddress;
     @Value("${microservice.address.frontEnd}")
     private String frontEndAddress;
+    @Value("${microservice.address.recruiting}")
+    private String recruitingAddress;
 
     @Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
@@ -45,6 +47,16 @@ public class GatewayApplication {
                         .filters(f -> f.filters(filterFactory.apply())
                                 .removeRequestHeader("Cookie"))
                         .uri(offerAddress))
+                .route(r -> r
+                        .path("/api/apply/**")
+                        .filters(f -> f.filters(filterFactory.apply())
+                                .removeRequestHeader("Cookie"))
+                        .uri(recruitingAddress))
+                .route(r -> r
+                        .path("/api/recruiting/**")
+                        .filters(f -> f.filters(filterFactory.apply())
+                                .removeRequestHeader("Cookie"))
+                        .uri(recruitingAddress))
                 .route(r -> r
                         .path("/**")
                         .filters(f -> f.filters(filterFactory.apply())

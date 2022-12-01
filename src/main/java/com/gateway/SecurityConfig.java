@@ -16,5 +16,10 @@ public class SecurityConfig {
                 .anyExchange().permitAll();
         return http.build();
     }
+    @Bean
+    public LoggingFilter loggingFilter() {
+        return new LoggingFilter();
+    }
+
 
 }
